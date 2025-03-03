@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RapidFire Corporation - Loader Key Generator</title>
+    <title>RapidFire Corporation - KeyAuth Key Generator</title>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -118,6 +118,7 @@
     <footer>© 2025 RapidFire Corporation. All Rights Reserved.</footer>
 
     <script>
+        let generatedKeys = [];
         function validateLogin() {
             let username = document.getElementById("username").value;
             let password = document.getElementById("password").value;
@@ -131,6 +132,7 @@
                 document.getElementById("login").classList.add("hidden");
                 document.getElementById("mainContent").classList.remove("hidden");
                 document.getElementById("error-message").style.display = "none";
+                sessionStorage.setItem("loggedInUser", username.toUpperCase());
             } else {
                 document.getElementById("error-message").style.display = "block";
             }
@@ -139,6 +141,8 @@
         function generateKey() {
             let app = document.getElementById("appName").value;
             let expiry = document.getElementById("expiry").value;
+            let user = sessionStorage.getItem("loggedInUser");
+            let date = new Date().toLocaleString();
             let apiUrl = `https://keyauth.win/api/seller/?sellerkey=1a92926458603cfb0b7ae466cb55463d&type=add&expiry=${expiry}&mask=${app}-******&level=1&amount=1&format=text`;
             
             fetch(apiUrl)
@@ -149,6 +153,9 @@
                     setTimeout(() => {
                         document.getElementById("notification").style.display = "none";
                     }, 2000);
+                    
+                    generatedKeys.push({ user, key, date });
+                    localStorage.setItem("generatedKeys", JSON.stringify(generatedKeys));
                 })
                 .catch(() => alert("Error generating key!"));
         }
