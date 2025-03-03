@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RapidFire Corporation - KeyAuth Key Generator</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url('light-bg.jpg') no-repeat center center/cover;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        .dark-mode {
+            background: url('dark-bg.jpg') no-repeat center center/cover;
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+            animation: fadeIn 1s ease-in-out;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background: #f9f9fc;
+            color: #333;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .dark-mode select, .dark-mode input, .dark-mode button {
+            background: #444;
+            color: white;
+            border: 1px solid #777;
+        }
+        select {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            background: #fff;
+        }
+        .dark-mode select {
+            color: white;
+            background: #555;
+        }
+        button:hover {
+            background: #d9e4ff;
+        }
+        .dark-mode button:hover {
+            background: #666;
+        }
+        .hidden { display: none; }
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4caf50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+            animation: slideUp 0.5s ease-in-out;
+        }
+        .admin-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ffcc00;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .admin-btn:hover {
+            background: #ffdb4d;
+        }
+        .mode-toggle {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #007bff;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .mode-toggle:hover {
+            background: #0056b3;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+        }
+        .dark-mode .error-message {
+            color: #ff6666;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>RapidFire Corporation</h1>
+    <div class="admin-btn" onclick="window.location.href='admin.html'">Admin Panel</div>
+    <div class="mode-toggle" onclick="toggleMode()">🌙 Dark Mode</div>
+    
+    <div id="login" class="container">
+        <h2>User Login</h2>
+        <label>Username:</label>
+        <input type="text" id="username">
+        <label>Password:</label>
+        <input type="password" id="password">
+        <button onclick="validateLogin()">Login</button>
+        <p id="error-message" class="error-message">Invalid username or password!</p>
+    </div>
+    
+    <div id="mainContent" class="container hidden">
+        <h2>Key Generator - RapidFire Corporation</h2>
+        <label>Select App:</label>
+        <select id="appName">
+            <option value="BRUTAL">🔥 Brutal</option>
+            <option value="INTERNAL">⚡ Internal</option>
+            <option value="DYNAMITE">💥 Dynamite</option>
+            <option value="ELITE">🏆 Elite</option>
+            <option value="BYPASS">🛡️ Bypass</option>
+        </select>
+        <label>Expiry (Days):</label>
+        <input type="number" id="expiry" value="1" min="1">
+        <button onclick="generateKey()">Generate Key</button>
+        <h3>Generated Key:</h3>
+        <div id="keyLog"></div>
+    </div>
+
+    <div id="notification" class="notification">Key copied!</div>
+    
+    <footer>© 2025 RapidFire Corporation. All Rights Reserved.</footer>
+
+    <script>
+        const validUsers = { "SANDY": "RAPIDDAD", "ABHIJEET": "RAPIDDAD" };
+        let adminKeys = [];
+
+        function validateLogin() {
+            let user = document.getElementById("username").value.toUpperCase();
+            let pass = document.getElementById("password").value;
+            if (validUsers[user] && validUsers[user] === pass) {
+                document.getElementById("login").classList.add("hidden");
+                document.getElementById("mainContent").classList.remove("hidden");
+                document.getElementById("error-message").style.display = "none";
+            } else {
+                document.getElementById("error-message").style.display = "block";
+            }
+        }
+        
+        function toggleMode() {
+            document.body.classList.toggle("dark-mode");
+            let modeButton = document.querySelector(".mode-toggle");
+            if (document.body.classList.contains("dark-mode")) {
+                modeButton.textContent = "☀️ Light Mode";
+            } else {
+                modeButton.textContent = "🌙 Dark Mode";
+            }
+        }
+    </script>
+</body>
+</html>
