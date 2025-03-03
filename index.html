@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RapidFire Corporation - KeyAuth Key Generator</title>
+    <title>RapidFire Corporation - Loader Key Generator</title>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -44,16 +44,6 @@
             color: white;
             border: 1px solid #777;
         }
-        select {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            background: #fff;
-        }
-        .dark-mode select {
-            color: white;
-            background: #555;
-        }
         button:hover {
             background: #d9e4ff;
         }
@@ -61,9 +51,9 @@
             background: #666;
         }
         .hidden { display: none; }
-        .notification {
+        .notification, .server-status {
             position: fixed;
-            bottom: 20px;
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
             background: #4caf50;
@@ -71,7 +61,7 @@
             padding: 10px;
             border-radius: 5px;
             display: none;
-            animation: slideUp 0.5s ease-in-out;
+            animation: fadeIn 0.5s ease-in-out;
         }
         .admin-btn {
             position: absolute;
@@ -88,34 +78,6 @@
         .admin-btn:hover {
             background: #ffdb4d;
         }
-        .mode-toggle {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: #007bff;
-            padding: 10px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            color: white;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        .mode-toggle:hover {
-            background: #0056b3;
-        }
-        .error-message {
-            color: red;
-            font-weight: bold;
-            margin-top: 10px;
-            display: none;
-        }
-        .dark-mode .error-message {
-            color: #ff6666;
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 12px;
-        }
     </style>
 </head>
 <body>
@@ -130,7 +92,7 @@
         <label>Password:</label>
         <input type="password" id="password">
         <button onclick="validateLogin()">Login</button>
-        <p id="error-message" class="error-message">Invalid username or password!</p>
+        <p id="error-message" class="error-message" style="color: red; display: none;">Invalid username or password!</p>
     </div>
     
     <div id="mainContent" class="container hidden">
@@ -151,17 +113,21 @@
     </div>
 
     <div id="notification" class="notification">Key copied!</div>
+    <div id="server-status" class="server-status">🚀 Rapid Servers Connected</div>
     
     <footer>© 2025 RapidFire Corporation. All Rights Reserved.</footer>
 
     <script>
-        const validUsers = { "SANDY": "SANDY9849", "ABHIJEET": "RAPIDDAD" };
-        let adminKeys = [];
-
         function validateLogin() {
-            let user = document.getElementById("username").value.toUpperCase();
-            let pass = document.getElementById("password").value;
-            if (validUsers[user] && validUsers[user] === pass) {
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+            
+            const validUsers = {
+                "ABHIJEET": "RAPIDDAD",
+                "SANDY": "SANDY9849"
+            };
+            
+            if (validUsers[username.toUpperCase()] === password) {
                 document.getElementById("login").classList.add("hidden");
                 document.getElementById("mainContent").classList.remove("hidden");
                 document.getElementById("error-message").style.display = "none";
@@ -170,14 +136,27 @@
             }
         }
         
+        function generateKey() {
+            let app = document.getElementById("appName").value;
+            let expiry = document.getElementById("expiry").value;
+            let apiUrl = `https://keyauth.win/api/seller/?sellerkey=1a92926458603cfb0b7ae466cb55463d&type=add&expiry=${expiry}&mask=${app}-******&level=1&amount=1&format=text`;
+            
+            fetch(apiUrl)
+                .then(response => response.text())
+                .then(key => {
+                    document.getElementById("keyLog").innerHTML = `<p>${key}</p>`;
+                    document.getElementById("notification").style.display = "block";
+                    setTimeout(() => {
+                        document.getElementById("notification").style.display = "none";
+                    }, 2000);
+                })
+                .catch(() => alert("Error generating key!"));
+        }
+        
         function toggleMode() {
             document.body.classList.toggle("dark-mode");
             let modeButton = document.querySelector(".mode-toggle");
-            if (document.body.classList.contains("dark-mode")) {
-                modeButton.textContent = "☀️ Light Mode";
-            } else {
-                modeButton.textContent = "🌙 Dark Mode";
-            }
+            modeButton.textContent = document.body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
         }
     </script>
 </body>
